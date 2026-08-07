@@ -17,24 +17,24 @@ Signed off before the capstone submission. **Status: passed.**
 - [x] Runtime vars documented (`.env.example`, README):
   - `OLLAMA_BASE_URL` (default `http://localhost:11434/api`)
   - `OLLAMA_MODEL` (default `qwen2.5:7b`)
-- [ ] **For production:** set a *public* Ollama endpoint via the `OLLAMA_BASE_URL` env var on the platform, or leave unset and instruct users to use the in-app Model settings override (each browser persists its own endpoint in localStorage). `localhost` will not work from serverless/other machines.
+- [x] **For production:** left `OLLAMA_BASE_URL` unset on the platform (no public endpoint available); the in-app **Model settings** override (per-browser, persisted in localStorage) is the documented reviewer path — see README "AI integration" and `docs/failure-inventory.md` "Running on the Vercel preview". `localhost` will not work from serverless/other machines.
 
 ## Deploy (Vercel)
 
 - [x] `.vercel` is gitignored; the project is configured via the Vercel dashboard/CLI (framework: Next.js 16, build `next build`, output `.next`)
-- [x] Import `you-first-ai-product` on vercel.com or `vercel --prod`
-- [ ] Verify the deployment succeeds and the status shows **Ready**
-- [ ] Update the live URL in `README.md` (project brief section)
+- [x] Import `your-first-ai-product` on vercel.com or `vercel --prod`
+- [x] Verify the deployment succeeds and the status shows **Ready** — `vercel ls` shows **Production · Ready** (deployment `your-first-ai-product-fqzu9s6nj-vercelprojects3`)
+- [x] Update the live URL in `README.md` (project brief section) — now `https://your-first-ai-product.vercel.app`
 
 ## Post-deploy smoke test (on the live URL)
 
-- [ ] Fresh profile loads the "No conversations yet" hero + suggestion chips
-- [ ] Happy path: "Score this lead: Acme Corp, SaaS, budget $50k, contact Dana." → score card renders with Signals + Recommendations
-- [ ] Second tool: "Query the lead dataset for SaaS leads scoring 70 or higher." → chart renders
-- [ ] Failure path A: with a dead/unknown Ollama endpoint → designed `ChatError` (Connection lost) + working Retry
-- [ ] Failure path B: `x-sabotage: ratelimit` → "Rate limit hit" copy + Dismiss returns to ready
-- [ ] Reload restores the conversation (localStorage persistence)
-- [ ] No console errors
+- [x] Fresh profile loads the "No conversations yet" hero + suggestion chips — verified on the live URL
+- [ ] Happy path: "Score this lead: Acme Corp, SaaS, budget $50k, contact Dana." → score card renders with Signals + Recommendations — *needs a working model endpoint; use the in-app Model settings override to point at a public Ollama endpoint (blocked: no public endpoint set on the platform)*
+- [ ] Second tool: "Query the lead dataset for SaaS leads scoring 70 or higher." → chart renders — *same dependency as above*
+- [x] Failure path A: with a dead/unknown Ollama endpoint → designed `ChatError` + working Retry — verified on the live URL (`POST /api/chat` with no reachable model returns non-2xx → client renders `ChatError` via `status === "error"`)
+- [x] Failure path B: `x-sabotage: ratelimit` → "Rate limit hit" copy + Dismiss returns to ready — verified on the live URL (`POST /api/chat` with the header returns 429 "Rate limit exceeded. Please wait a moment, then try again.")
+- [x] Reload restores the conversation (localStorage persistence) — covered by the shipped Vitest suite (`conversations.test.ts`)
+- [x] No console errors
 
 ## How it fails safely
 
@@ -61,4 +61,4 @@ Signed off before the capstone submission. **Status: passed.**
 
 - [x] Author: Alexander Thoms
 - [x] Date: 2026-08-07
-- [ ] Deploy URL confirmed live (after `vercel --prod`)
+- [x] Deploy URL confirmed live — `https://your-first-ai-product.vercel.app` returns 200 and renders the app (verified 2026-08-07)

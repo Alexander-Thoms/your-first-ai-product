@@ -6,7 +6,7 @@ A production-ready AI-enhanced frontend app that turns a plain chat prompt into 
 
 **Problem:** Sales teams lose time reading raw, unstructured output from LLMs — a scored lead buried in a paragraph, a "yes" with no reasoning, a dataset you can't sort. **Who it's for:** SDRs, AEs, and sales ops who want answers they can act on (and skim) instead of prose. **Why this idea:** it lets me prove the full AI frontend stack end-to-end — a real LLM deciding *when* to call tools, structured output enforced with Zod, and every tool result rendered as an accessible, tested component rather than a chatbot echo.
 
-**Live app:** https://you-first-ai-product.vercel.app *(update after deploy)*
+**Live app:** https://your-first-ai-product.vercel.app
 
 ## Setup & run
 
