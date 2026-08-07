@@ -6,7 +6,7 @@ Signed off before the capstone submission. **Status: passed.**
 
 - [x] `npm install` clean on a fresh clone
 - [x] `npm run lint` — 0 errors, 0 warnings
-- [x] `npm run test` — 81 tests pass
+- [x] `npm run test` — 82 tests pass
 - [x] `npm run coverage` — ~86% line coverage (threshold ≥50%)
 - [x] `npm run build` — production build compiles; routes: `/` (static), `/api/chat` (dynamic)
 - [x] `npm run start` + manual smoke test of the happy path and one failure path

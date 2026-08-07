@@ -20,6 +20,7 @@ fixed review order; run each step in sequence, in the deployed preview.
 | 8 | Tool failure | `fetchMetaTags` on dead URL / malformed input | Tool `output-error` state → designed `ErrorPanel` with guidance |
 | 9 | Corrupt localStorage | Manually corrupt the key | Versioned schema + try/catch → falls back to clean state |
 | 10 | Route crash | Throw in a route segment | `error.tsx` boundary (client) with `retry`; `global-error.tsx`; `not-found.tsx` |
+| 11 | Multiple stored conversations after refresh | Create several conversations, then reload | Hydration-safe boot: initial state is a single fresh conversation (SSR/client agree), then a ref-gated mount effect hydrates the stored list — no hydration mismatch |
 
 ## Design decisions
 
@@ -52,7 +53,7 @@ URL should include `/api` (it is appended automatically if omitted).
 
 ## Automated verification
 
-**Shipped in-repo (Vitest):** `npm test` runs 81 unit + component tests (~86% line coverage, threshold ≥50%) covering tool edge cases (empty query result, score clamping, fetch failure paths), settings/URL validation, corrupt-storage fallback, error classification, and every tool-part component state. See `README.md → Testing`.
+**Shipped in-repo (Vitest):** `npm test` runs 82 unit + component tests (~86% line coverage, threshold ≥50%) covering tool edge cases (empty query result, score clamping, fetch failure paths), settings/URL validation, corrupt-storage fallback, error classification, every tool-part component state, and localStorage hydration (stored conversations render tabs after mount). See `README.md → Testing`.
 
 **Browser E2E (historical):** a 24-assertion puppeteer-core suite was also run against a production build (`next start`) with headless Edge. All passed:
 

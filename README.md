@@ -8,6 +8,8 @@ A production-ready AI-enhanced frontend app that turns a plain chat prompt into 
 
 **Live app:** https://your-first-ai-product.vercel.app
 
+## Screenshots
+
 ## Setup & run
 
 Requirements: Node 20+, npm. The app talks to an LLM — see [AI integration](#ai-integration) for model setup.
@@ -56,12 +58,12 @@ Every failure path has a designed state (full inventory + reviewer script in `do
 
 - **Errors:** `ChatError` classifies failures into rate-limit / offline / tool / generic with distinct copy, icon, and a Retry that re-sends only the failed message (double-click guarded). Tool failures render in-frame (`output-error`) with guidance, never crashing the route. Route crashes hit `error.tsx` / `global-error.tsx` boundaries.
 - **Empty states:** first-run hero with clickable example prompts, no-results dataset chart with a concrete next action, missing meta fields shown as "missing" rather than blank.
-- **Edge cases:** empty/whitespace input guarded, corrupt localStorage falls back cleanly (versioned schema + try/catch), invalid settings URLs rejected, fetch timeouts / non-HTML / HTTP-error responses surface readable errors, division-by-zero and score clamping guarded, unknown tool parts fall back gracefully.
+- **Edge cases:** empty/whitespace input guarded, corrupt localStorage falls back cleanly (versioned schema + try/catch), multiple stored conversations hydrate safely after refresh (ref-gated mount effect, no hydration mismatch), invalid settings URLs rejected, fetch timeouts / non-HTML / HTTP-error responses surface readable errors, division-by-zero and score clamping guarded, unknown tool parts fall back gracefully.
 - **Sabotage:** set `x-sabotage: ratelimit | midstream | malformed-tool` (or `SABOTAGE` env) to reproduce failures deterministically in review.
 
 ## Testing
 
-Vitest + Testing Library. **81 tests, ~86% line coverage** (`npm test`, `npm run coverage`).
+Vitest + Testing Library. **82 tests, ~86% line coverage** (`npm test`, `npm run coverage`).
 
 - **Unit:** tool logic (scoring thresholds, filters/sorts, empty-result division guard, fetch error paths), settings normalization, conversation storage corruption, error classification, sabotage resolution.
 - **Component:** `Chat` (empty state, input guard, send), `ChatError` (kind-specific copy, retry guard), `Settings` (validation + persistence), and all `tool-parts` (score card, meta fallbacks, chart empty state, tool-frame lifecycle/error states).

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Chat from "./chat";
 
@@ -24,6 +24,7 @@ vi.mock("ai", () => ({
 }));
 
 beforeEach(() => {
+  window.localStorage.clear();
   Object.defineProperty(HTMLElement.prototype, "scrollTo", {
     configurable: true,
     value: vi.fn(),
@@ -66,5 +67,22 @@ describe("Chat", () => {
     render(<Chat />);
     await user.click(screen.getByRole("button", { name: /New/i }));
     expect(screen.getByText("No conversations yet")).toBeInTheDocument();
+  });
+
+  it("loads stored conversations from localStorage after mount", async () => {
+    window.localStorage.setItem(
+      "pipeline-copilot:conversations:v1",
+      JSON.stringify({
+        version: 1,
+        conversations: [
+          { id: "c1", title: "First chat", messages: [], updatedAt: 1 },
+          { id: "c2", title: "Second chat", messages: [], updatedAt: 2 },
+        ],
+      }),
+    );
+    render(<Chat />);
+    const nav = await screen.findByRole("navigation");
+    expect(within(nav).getByRole("button", { name: "Second chat" })).toBeInTheDocument();
+    expect(within(nav).getAllByRole("button")).toHaveLength(2);
   });
 });

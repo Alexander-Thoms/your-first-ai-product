@@ -103,23 +103,22 @@ function AssistantSkeleton() {
   );
 }
 
+function createFreshConversation(): Conversation {
+  return {
+    id: createConversationId(),
+    title: "New conversation",
+    messages: [],
+    updatedAt: Date.now(),
+  };
+}
+
 export default function Chat() {
   const [state, setState] = useState(() => {
-    const stored = loadConversations();
-    const list =
-      stored.length > 0
-        ? stored
-        : [
-            {
-              id: createConversationId(),
-              title: "New conversation",
-              messages: [],
-              updatedAt: Date.now(),
-            } satisfies Conversation,
-          ];
-    return { conversations: list, activeId: list[0].id };
+    const fresh = createFreshConversation();
+    return { conversations: [fresh], activeId: fresh.id };
   });
   const [input, setInput] = useState("");
+  const [mounted, setMounted] = useState(false);
   const [settings, setSettings] = useState<ChatSettings>(() => loadSettings());
 
   const conversations = state.conversations;
@@ -154,9 +153,24 @@ export default function Chat() {
     }));
   }
 
+  const initialized = useRef(false);
+
   useEffect(() => {
-    saveConversations(conversations);
+    if (initialized.current) {
+      saveConversations(conversations);
+      return;
+    }
+    initialized.current = true;
+    const stored = loadConversations();
+    setState({
+      conversations: stored.length > 0 ? stored : conversations,
+      activeId: stored.length > 0 ? stored[0].id : conversations[0].id,
+    });
   }, [conversations]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isBusy = status === "submitted" || status === "streaming";
 
@@ -221,7 +235,7 @@ export default function Chat() {
       !lastMessage.parts.some((part) => part.type === "text" && part.text));
 
   return (
-    <div className="flex min-h-dvh flex-col bg-zinc-950 text-zinc-100">
+    <div className="flex h-dvh flex-col bg-zinc-950 text-zinc-100">
       <header className="border-b border-zinc-800/70 px-4 py-4 sm:px-6">
         <div className="mx-auto flex max-w-3xl items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
@@ -384,7 +398,7 @@ export default function Chat() {
           ) : (
             <button
               type="submit"
-              disabled={!input.trim()}
+              disabled={mounted && !input.trim()}
               className="rounded-xl bg-indigo-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:opacity-40"
             >
               Send
