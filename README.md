@@ -9,6 +9,11 @@ A production-ready AI-enhanced frontend app that turns a plain chat prompt into 
 **Live app:** https://your-first-ai-product.vercel.app
 
 ## Screenshots
+<img width="1440" height="781" alt="image" src="https://github.com/user-attachments/assets/3b6f9b53-4404-45e5-9611-8e1b9070be69" />
+<img width="1771" height="930" alt="image" src="https://github.com/user-attachments/assets/d5984ada-9f99-4eb2-b064-9cb1b82ffdbe" />
+<img width="1672" height="940" alt="image" src="https://github.com/user-attachments/assets/0270c4a8-27a2-4080-98e0-806595b1f9e4" />
+<img width="1918" height="937" alt="image" src="https://github.com/user-attachments/assets/34bf8414-f2b3-4d40-b057-6a3fbe99cee1" />
+
 
 ## Setup & run
 
